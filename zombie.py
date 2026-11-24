@@ -2,8 +2,8 @@ import random
 
 from pico2d import load_image, draw_rectangle, clamp
 
-import game_framework
 import game_world
+import game_framework
 
 # 좀비 달리기 속력: km/h -> 픽셀/초
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -34,6 +34,7 @@ class Zombie:
         self.x, self.y = random.randint(MIN_X, MAX_X), 150
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1, 1])
+        self.hit_count = 0
 
     def update(self):
         dt = game_framework.frame_time
@@ -55,3 +56,10 @@ class Zombie:
 
     def get_bb(self):
         return self.x - 100, self.y - 100, self.x + 100, self.y + 100
+
+    def handle_collision(self, group, other):
+            if group == 'zombie:ball':
+                if self.hit_count == 1:
+                    print('sf')
+                else:
+                    self.hit_count += 1
